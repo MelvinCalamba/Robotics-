@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Subject</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<div class="flex flex-col md:flex-row min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-full md:w-64 bg-blue-900 text-white flex-shrink-0">
+    <div class="px-6 py-4 font-bold text-xl bg-blue-800 border-b border-blue-700">Admin Panel</div>
+    <nav class="flex flex-col space-y-1 px-4 py-4">
+      <a href="dashboard.html" class="flex items-center px-4 py-2 hover:bg-blue-800 rounded">📊 Dashboard</a>
+      <a href="add-subject.html" class="flex items-center px-4 py-2 bg-blue-800 rounded">📚 Add Subject</a>
+      <a href="student-records.html" class="flex items-center px-4 py-2 hover:bg-blue-800 rounded">🕒 Student Records</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-4">
+    <div class="bg-white w-full rounded shadow p-6">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+        <h1 class="text-xl font-bold text-blue-800">📚 Subjects</h1>
+        <button onclick="openModal()" class="mt-2 sm:mt-0 bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">+ Add Subject</button>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full table-auto text-sm text-left border border-gray-200">
+          <thead class="bg-blue-50 text-blue-800 uppercase">
+            <tr>
+              <th class="px-4 py-2">Subject Name</th>
+              <th class="px-4 py-2">Professor</th>
+              <th class="px-4 py-2">Day</th>
+              <th class="px-4 py-2">Start Time</th>
+              <th class="px-4 py-2">End Time</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-t">
+              <td class="px-4 py-2">Web Development</td>
+              <td class="px-4 py-2">Mr. Reyes</td>
+              <td class="px-4 py-2">Monday</td>
+              <td class="px-4 py-2">08:00 AM</td>
+              <td class="px-4 py-2">10:00 AM</td>
+            </tr>
+            <!-- Additional rows can be added dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal -->
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    <h2 class="text-lg font-bold text-blue-800 mb-4">Add New Subject</h2>
+    <form id="subjectForm" class="space-y-4">
+      <input type="text" placeholder="Subject Name" class="w-full border px-4 py-2 rounded" required />
+      <input type="text" placeholder="Professor" class="w-full border px-4 py-2 rounded" required />
+      <select class="w-full border px-4 py-2 rounded" required>
+        <option value="">Select Day</option>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+      </select>
+      <input type="time" class="w-full border px-4 py-2 rounded" required />
+      <input type="time" class="w-full border px-4 py-2 rounded" required />
+
+      <div class="flex justify-end space-x-2">
+        <button type="button" onclick="closeModal()" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
+        <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Add</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Script -->
+<script>
+  function openModal() {
+    document.getElementById('modal').classList.remove('hidden');
+    document.getElementById('modal').classList.add('flex');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+    document.getElementById('modal').classList.remove('flex');
+  }
+
+  // Optional: handle form submission
+  document.getElementById('subjectForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Process the form data here (e.g., append to table or send to backend)
+    alert("Subject added (this is a placeholder)");
+    closeModal();
+  });
+</script>
+
+</body>
+</html>
