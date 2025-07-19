@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Records</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<div class="flex flex-col md:flex-row min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-full md:w-64 bg-blue-900 text-white flex-shrink-0">
+    <div class="px-6 py-4 font-bold text-xl bg-blue-800 border-b border-blue-700">Admin Panel</div>
+    <nav class="flex flex-col space-y-1 px-4 py-4">
+      <a href="dashboard.html" class="flex items-center px-4 py-2 hover:bg-blue-800 rounded">📊 Dashboard</a>
+      <a href="add-subject.html" class="flex items-center px-4 py-2 hover:bg-blue-800 rounded">📚 Add Subject</a>
+      <a href="student-records.html" class="flex items-center px-4 py-2 bg-blue-800 rounded">🕒 Student Records</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-4">
+    <div class="bg-white w-full rounded shadow p-6">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+        <h1 class="text-xl font-bold text-blue-800">🕒 Student Time In/Out Records</h1>
+        <div class="flex gap-2 w-full sm:w-auto">
+          <input type="text" id="searchInput" placeholder="Search student..." class="border px-3 py-2 rounded w-full sm:w-64" onkeyup="filterTable()" />
+          <select id="filterStatus" onchange="filterTable()" class="border px-3 py-2 rounded">
+            <option value="">All Status</option>
+            <option value="On Time">On Time</option>
+            <option value="Late">Late</option>
+            <option value="No Time Out">No Time Out</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full table-auto text-sm text-left border border-gray-200" id="recordsTable">
+          <thead class="bg-blue-50 text-blue-800 uppercase">
+            <tr>
+              <th class="px-4 py-2">ID</th>
+              <th class="px-4 py-2">Name</th>
+              <th class="px-4 py-2">Date</th>
+              <th class="px-4 py-2">Time In</th>
+              <th class="px-4 py-2">Time Out</th>
+              <th class="px-4 py-2">Status</th>
+              <th class="px-4 py-2">Action</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-t">
+              <td class="px-4 py-2">2023-00123</td>
+              <td class="px-4 py-2">Juan Dela Cruz</td>
+              <td class="px-4 py-2">2025-07-09</td>
+              <td class="px-4 py-2">07:45 AM</td>
+              <td class="px-4 py-2">04:15 PM</td>
+              <td class="px-4 py-2">
+                <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">On Time</span>
+              </td>
+              <td class="px-4 py-2">
+                <button onclick="openViolationModal('Juan Dela Cruz', 'None')" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-xs">View</button>
+              </td>
+            </tr>
+            <tr class="border-t">
+              <td class="px-4 py-2">2023-00456</td>
+              <td class="px-4 py-2">Maria Santos</td>
+              <td class="px-4 py-2">2025-07-09</td>
+              <td class="px-4 py-2">08:22 AM</td>
+              <td class="px-4 py-2">--:--</td>
+              <td class="px-4 py-2">
+                <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">No time out</span>
+              </td>
+              <td class="px-4 py-2">
+                <button onclick="openViolationModal('Maria Santos', 'Late arrival. Must be before 08:15 AM.')" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-xs">View</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal -->
+<div id="violationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    <h2 class="text-lg font-bold text-blue-800 mb-2">🚫 Violation Details</h2>
+    <p class="text-sm mb-1"><strong>Student:</strong> <span id="violationStudent"></span></p>
+    <p class="text-sm"><strong>Description:</strong></p>
+    <p id="violationDescription" class="text-gray-700 mt-1 mb-4"></p>
+    <div class="text-right">
+      <button onclick="closeViolationModal()" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Script -->
+<script>
+  function openViolationModal(student, description) {
+    document.getElementById("violationStudent").innerText = student;
+    document.getElementById("violationDescription").innerText = description;
+    document.getElementById("violationModal").classList.remove("hidden");
+    document.getElementById("violationModal").classList.add("flex");
+  }
+
+  function closeViolationModal() {
+    document.getElementById("violationModal").classList.add("hidden");
+    document.getElementById("violationModal").classList.remove("flex");
+  }
+
+  function filterTable() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    const filter = document.getElementById("filterStatus").value;
+    const rows = document.querySelectorAll("#recordsTable tbody tr");
+
+    rows.forEach(row => {
+      const rowText = row.innerText.toLowerCase();
+      const status = row.querySelector("td:nth-child(6)").innerText.trim();
+
+      const matchSearch = rowText.includes(input);
+      const matchFilter = filter === "" || status === filter;
+
+      row.style.display = (matchSearch && matchFilter) ? "" : "none";
+    });
+  }
+</script>
+
+</body>
+</html>

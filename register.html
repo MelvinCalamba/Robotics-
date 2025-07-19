@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-500 to-blue-700 px-4 py-8">
+  <div class="w-full max-w-3xl p-10 md:p-12 space-y-8 bg-white rounded-2xl shadow-xl">
+    <h2 class="text-3xl font-bold text-center text-gray-800">Create Account</h2>
+
+    <!-- Profile Picture -->
+    <div class="text-center">
+      <label for="profileImage" class="cursor-pointer">
+        <img id="previewImage" src="https://via.placeholder.com/100" alt="Preview"
+             class="w-24 h-24 mx-auto mb-2 rounded-full object-cover border" />
+        <span class="block text-sm text-gray-600 hover:underline">Upload Profile Picture</span>
+      </label>
+      <input type="file" id="profileImage" name="profileImage" accept="image/*" class="hidden" />
+    </div>
+
+    <form action="#" method="POST" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Left Side -->
+        <div class="space-y-5">
+          <div>
+            <label class="block mb-1 text-sm font-medium text-gray-700">First Name</label>
+            <input type="text" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+          <div>
+            <label class="block mb-1 text-sm font-medium text-gray-700">Middle Name</label>
+            <input type="text" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+          <div>
+            <label class="block mb-1 text-sm font-medium text-gray-700">Last Name</label>
+            <input type="text" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="space-y-5">
+          <div>
+            <label class="block mb-1 text-sm font-medium text-gray-700">Student Number</label>
+            <input type="text" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+          <div>
+            <label class="block mb-1 text-sm font-medium text-gray-700">Email</label>
+            <input type="email" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+          <div>
+            <label class="block mb-1 text-sm font-medium text-gray-700">Password</label>
+            <input type="password" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit"
+              class="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+        Register
+      </button>
+    </form>
+
+    <p class="text-sm text-center text-gray-600">
+      Already have an account?
+      <a href="login.html" class="text-blue-600 hover:underline">Log in</a>
+    </p>
+  </div>
+
+  <!-- JS for preview image -->
+  <script>
+    const profileInput = document.getElementById('profileImage');
+    const previewImage = document.getElementById('previewImage');
+
+    profileInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          previewImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>

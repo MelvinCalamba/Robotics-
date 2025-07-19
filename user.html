@@ -1,0 +1,114 @@
+<!-- user-monitor-dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Monitor Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4">
+
+  <div class="max-w-7xl mx-auto bg-white shadow-md rounded-xl p-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-blue-700">Student Attendance Monitor</h1>
+        <p class="text-sm text-gray-500">Live summary of today's RFID logs</p>
+      </div>
+      <div class="mt-4 sm:mt-0">
+        <input type="date" class="border rounded-md px-3 py-1 text-sm text-gray-700" />
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full table-auto text-left border-t border-gray-200">
+        <thead class="bg-blue-50 text-blue-700 text-sm uppercase font-semibold">
+          <tr>
+            <th class="px-4 py-3">Subject</th>
+            <th class="px-4 py-3">Professor</th>
+            <th class="px-4 py-3">Time In</th>
+            <th class="px-4 py-3">Time Out</th>
+            <th class="px-4 py-3">Status</th>
+            <th class="px-4 py-3">Violation</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm text-gray-700">
+          <!-- Row 1 -->
+          <tr class="border-b">
+            <td class="px-4 py-3">2023-00123</td>
+            <td class="px-4 py-3">Juan Dela Cruz</td>
+            <td class="px-4 py-3">07:58 AM</td>
+            <td class="px-4 py-3">04:30 PM</td>
+            <td class="px-4 py-3">
+              <span class="inline-block px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">On Time</span>
+            </td>
+            <td class="px-4 py-3">
+              <button onclick="openModal('Late Entry', 'V001', 'Student arrived more than 15 minutes late.')"
+                      class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-full">
+                View
+              </button>
+            </td>
+          </tr>
+
+          <!-- Row 2 -->
+          <tr class="border-b">
+            <td class="px-4 py-3">2023-00456</td>
+            <td class="px-4 py-3">Maria Santos</td>
+            <td class="px-4 py-3">08:17 AM</td>
+            <td class="px-4 py-3">--:--</td>
+            <td class="px-4 py-3">
+              <span class="inline-block px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full">Late</span>
+            </td>
+            <td class="px-4 py-3">
+              <button onclick="openModal('Unexcused Tardiness', 'V002', 'Student did not provide a valid excuse for being late.')"
+                      class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-full">
+                View
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-6 text-sm text-gray-400 text-center">
+      Powered by Josef
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="violationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+      <h2 class="text-xl font-bold text-red-600 mb-2">Violation Details</h2>
+      <p><strong>Violation:</strong> <span id="violationName"></span></p>
+      <p><strong>State No.:</strong> <span id="violationState"></span></p>
+      <p class="mt-2"><strong>Description:</strong></p>
+      <p id="violationDesc" class="text-sm text-gray-700 mt-1"></p>
+
+      <button onclick="closeModal()"
+              class="mt-4 bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- Script for modal -->
+  <script>
+    function openModal(name, state, desc) {
+      document.getElementById('violationName').textContent = name;
+      document.getElementById('violationState').textContent = state;
+      document.getElementById('violationDesc').textContent = desc;
+      document.getElementById('violationModal').classList.remove('hidden');
+      document.getElementById('violationModal').classList.add('flex');
+    }
+
+    function closeModal() {
+      document.getElementById('violationModal').classList.add('hidden');
+      document.getElementById('violationModal').classList.remove('flex');
+    }
+  </script>
+
+</body>
+</html>

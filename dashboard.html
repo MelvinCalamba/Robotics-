@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<div class="flex flex-col md:flex-row min-h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-full md:w-64 bg-blue-900 text-white flex-shrink-0">
+    <div class="px-6 py-4 font-bold text-xl bg-blue-800 border-b border-blue-700">Admin Panel</div>
+    <nav class="flex flex-col space-y-1 px-4 py-4">
+      <a href="dashboard.html" class="flex items-center px-4 py-2 bg-blue-800 rounded">📊 Dashboard</a>
+      <a href="add-subject.html" class="flex items-center px-4 py-2 hover:bg-blue-800 rounded">📚 Add Subject</a>
+      <a href="student-records.html" class="flex items-center px-4 py-2 hover:bg-blue-800 rounded">🕒 Student Records</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-4">
+    <div class="space-y-6">
+
+      <!-- Header -->
+      <div class="bg-white w-full rounded shadow p-6">
+        <h1 class="text-xl font-bold text-blue-800 mb-2 flex items-center gap-2">📊 Dashboard</h1>
+        <p class="text-gray-600">Welcome to your admin dashboard. Navigate using the sidebar.</p>
+      </div>
+
+      <!-- Grid Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-lg shadow p-4">
+          <h2 class="text-sm text-gray-500">Total Students</h2>
+          <p class="text-2xl font-bold text-blue-700">180</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+          <h2 class="text-sm text-gray-500">Time In Records</h2>
+          <p class="text-2xl font-bold text-green-600">725</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+          <h2 class="text-sm text-gray-500">Time Out Records</h2>
+          <p class="text-2xl font-bold text-yellow-600">691</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+          <h2 class="text-sm text-gray-500">Total Late</h2>
+          <p class="text-2xl font-bold text-red-600">49</p>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Bar Chart -->
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="text-lg font-semibold text-blue-800 mb-4">Time In/Out Records (This Week)</h2>
+          <canvas id="barChart"></canvas>
+        </div>
+
+        <!-- Line Chart -->
+        <div class="bg-white p-6 rounded shadow">
+          <h2 class="text-lg font-semibold text-blue-800 mb-4">RL Predicted Lates (Next 7 Days)</h2>
+          <canvas id="lineChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  // Bar Chart for Time In/Out
+  const ctxBar = document.getElementById('barChart').getContext('2d');
+  new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+      datasets: [
+        {
+          label: 'Time In',
+          data: [140, 135, 142, 128, 180],
+          backgroundColor: '#3b82f6'
+        },
+        {
+          label: 'Time Out',
+          data: [130, 120, 139, 125, 177],
+          backgroundColor: '#f59e0b'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+
+  // Line Chart for Predicted Lates (RL Model)
+  const ctxLine = document.getElementById('lineChart').getContext('2d');
+  new Chart(ctxLine, {
+    type: 'line',
+    data: {
+      labels: ['Today', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+      datasets: [{
+        label: 'Predicted Late Students',
+        data: [7, 6, 5, 8, 4, 3, 2],
+        fill: false,
+        borderColor: '#ef4444',
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
