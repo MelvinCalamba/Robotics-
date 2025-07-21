@@ -184,38 +184,32 @@
     </div>
   </div>
 </div>
-        
-    <!-- Cancel Class Button -->
-    <div class="flex justify-end mb-4">
-      <button onclick="cancelClass()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-        Cancel Class
-      </button>
+
+<!-- Edit Student Record Modal -->
+    <div id="editStudentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+        <h2 class="text-lg font-bold text-blue-800 mb-4">Edit Student Record</h2>
+        <form id="editStudentForm" class="space-y-4">
+          <div class="d-flex justify-content-between mb-3">
+          <input type="text" id="editStudentId" class="w-full border px-4 py-2 rounded" readonly />
+          <input type="text" id="editStudentName" class="w-full border px-4 py-2 rounded" required />
+          <input type="date" id="editStudentDate" class="w-full border px-4 py-2 rounded" required />
+          <input type="time" id="editStudentTimeIn" class="w-full border px-4 py-2 rounded" />
+          <input type="time" id="editStudentTimeOut" class="w-full border px-4 py-2 rounded" />
+          <select id="editStudentStatus" class="w-full border px-4 py-2 rounded" required>
+            <option value="Present">Present</option>
+            <option value="Late">Late</option>
+            <option value="Absent">Absent</option>
+            <option value="Excused">Excused</option>
+          </select>
+
+          <div class="flex justify-end space-x-2">
+            <button type="button" onclick="closeEditStudentModal()" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
+            <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Save Changes</button>
+          </div>
+        </form>
+      </div>
     </div>
-    
-    <div class="overflow-x-auto">
-      <table class="w-full table-auto text-sm text-left border border-gray-200">
-        <thead class="bg-blue-50 text-blue-800 uppercase">
-          <tr>
-            <th class="px-4 py-2">Student ID</th>
-            <th class="px-4 py-2">Name</th>
-            <th class="px-4 py-2">Date</th>
-            <th class="px-4 py-2">Time-in</th>
-            <th class="px-4 py-2">Time-out</th>
-            <th class="px-4 py-2">Status</th>
-            <th class="px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="studentTableBody" class="text-gray-700">
-          <!-- Dynamically populated -->
-        </tbody>
-      </table>
-    </div>
-    
-    <div class="flex justify-end mt-4">
-      <button onclick="closeStudentModal()" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Close</button>
-    </div>
-  </div>
-</div>
 
 <!-- Script -->
 <script>
