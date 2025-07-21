@@ -32,23 +32,46 @@
       <div class="overflow-x-auto">
         <table class="w-full table-auto text-sm text-left border border-gray-200">
           <thead class="bg-blue-50 text-blue-800 uppercase">
-            <tr>
-              <th class="px-4 py-2">Subject Name</th>
-              <th class="px-4 py-2">Professor</th>
-              <th class="px-4 py-2">Day</th>
-              <th class="px-4 py-2">Start Time</th>
-              <th class="px-4 py-2">End Time</th>
-            </tr>
-          </thead>
-          <tbody class="text-gray-700">
-            <tr class="border-t">
-              <td class="px-4 py-2">Web Development</td>
-              <td class="px-4 py-2">Mr. Reyes</td>
-              <td class="px-4 py-2">Monday</td>
-              <td class="px-4 py-2">08:00 AM</td>
-              <td class="px-4 py-2">10:00 AM</td>
-            </tr>
-            <!-- Additional rows can be added dynamically -->
+          <tr>
+            <th class="px-4 py-2">Subject Name</th>
+            <th class="px-4 py-2">Professor</th>
+            <th class="px-4 py-2">Day</th>
+            <th class="px-4 py-2">Start Time</th>
+            <th class="px-4 py-2">End Time</th>
+            <th class="px-4 py-2 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          <tr class="border-t">
+            <td class="px-4 py-2">Web Development</td>
+            <td class="px-4 py-2">Mr. Reyes</td>
+            <td class="px-4 py-2">Monday</td>
+            <td class="px-4 py-2">08:00 AM</td>
+            <td class="px-4 py-2">10:00 AM</td>
+            <td class="px-4 py-2 text-center space-x-2">
+              <button onclick="viewStudents('Web Development')" class="bg-green-600 text-white text-xs px-3 py-1 rounded hover:bg-green-700">
+                Students
+              </button>
+              <button onclick="editSubject('Web Development')" class="bg-blue-600 text-white text-xs px-3 py-1 rounded hover:bg-blue-700">
+                Edit
+              </button>
+            </td>
+          </tr>
+          <tr class="border-t">
+            <td class="px-4 py-2">Math</td>
+            <td class="px-4 py-2">Ms. Cruz</td>
+            <td class="px-4 py-2">Tuesday</td>
+            <td class="px-4 py-2">10:00 AM</td>
+            <td class="px-4 py-2">12:00 PM</td>
+            <td class="px-4 py-2 text-center space-x-2">
+              <button onclick="viewStudents('Math')" class="bg-green-600 text-white text-xs px-3 py-1 rounded hover:bg-green-700">
+                Students
+              </button>
+              <button onclick="editSubject('Math')" class="bg-blue-600 text-white text-xs px-3 py-1 rounded hover:bg-blue-700">
+                Edit
+              </button>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -56,7 +79,7 @@
   </main>
 </div>
 
-<!-- Modal -->
+<!-- Add Subject Modal -->
 <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
   <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
     <h2 class="text-lg font-bold text-blue-800 mb-4">Add New Subject</h2>
@@ -82,8 +105,151 @@
   </div>
 </div>
 
+<!-- Edit Subject Modal -->
+<div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+    <h2 class="text-lg font-bold text-blue-800 mb-4">Edit Subject</h2>
+    <form id="editSubjectForm" class="space-y-4">
+      <input type="text" id="editSubjectName" placeholder="Subject Name" class="w-full border px-4 py-2 rounded" required />
+      <input type="text" id="editProfessor" placeholder="Professor" class="w-full border px-4 py-2 rounded" required />
+      <select id="editDay" class="w-full border px-4 py-2 rounded" required>
+        <option value="">Select Day</option>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+      </select>
+      <input type="time" id="editStartTime" class="w-full border px-4 py-2 rounded" required />
+      <input type="time" id="editEndTime" class="w-full border px-4 py-2 rounded" required />
+
+      <div class="flex justify-end space-x-2">
+        <button type="button" onclick="closeEditModal()" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
+        <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Student Record Modal -->
+<div id="studentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6">
+    <h2 class="text-lg font-bold text-blue-800 mb-4">Student Records for <span id="subjectTitle" class="text-gray-700"></span></h2>
+
+    <!-- Date Filter and Cancel Class Buttons -->
+    <div class="flex flex-col sm:flex-row sm:items-end gap-4 mb-4">
+      <div class="flex-1 flex flex-col sm:flex-row sm:items-end gap-2">
+        <div class="flex-1">
+          <label for="startDate" class="block text-sm font-medium text-gray-700">Start Date</label>
+          <input type="date" id="startDate" class="w-full border px-3 py-2 rounded">
+        </div>
+        <div class="flex-1">
+          <label for="endDate" class="block text-sm font-medium text-gray-700">End Date</label>
+          <input type="date" id="endDate" class="w-full border px-3 py-2 rounded">
+        </div>
+        <div class="h-[42px]">
+          <button id="sendDateFilter" class="h-full bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">
+            Filter
+          </button>
+        </div>
+      </div>
+      <div class="h-[42px]">
+        <button onclick="cancelClass()" class="h-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+          Cancel Class
+        </button>
+      </div>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full table-auto text-sm text-left border border-gray-200">
+        <thead class="bg-blue-50 text-blue-800 uppercase">
+          <tr>
+            <th class="px-4 py-2">Student ID</th>
+            <th class="px-4 py-2">Name</th>
+            <th class="px-4 py-2">Date</th>
+            <th class="px-4 py-2">Time-in</th>
+            <th class="px-4 py-2">Time-out</th>
+            <th class="px-4 py-2">Status</th>
+            <th class="px-4 py-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="studentTableBody" class="text-gray-700">
+          <!-- Dynamically populated -->
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="flex justify-end mt-4">
+      <button onclick="closeStudentModal()" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Close</button>
+    </div>
+  </div>
+</div>
+        
+    <!-- Cancel Class Button -->
+    <div class="flex justify-end mb-4">
+      <button onclick="cancelClass()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+        Cancel Class
+      </button>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="w-full table-auto text-sm text-left border border-gray-200">
+        <thead class="bg-blue-50 text-blue-800 uppercase">
+          <tr>
+            <th class="px-4 py-2">Student ID</th>
+            <th class="px-4 py-2">Name</th>
+            <th class="px-4 py-2">Date</th>
+            <th class="px-4 py-2">Time-in</th>
+            <th class="px-4 py-2">Time-out</th>
+            <th class="px-4 py-2">Status</th>
+            <th class="px-4 py-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="studentTableBody" class="text-gray-700">
+          <!-- Dynamically populated -->
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="flex justify-end mt-4">
+      <button onclick="closeStudentModal()" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- Script -->
 <script>
+  // Sample data
+  const subjects = [
+    {
+      name: "Web Development",
+      professor: "Mr. Reyes",
+      day: "Monday",
+      startTime: "08:00",
+      endTime: "10:00"
+    },
+    {
+      name: "Math",
+      professor: "Ms. Cruz",
+      day: "Tuesday",
+      startTime: "10:00",
+      endTime: "12:00"
+    }
+  ];
+
+  const subjectStudents = {
+    "Web Development": [
+      { id: "2023001", name: "Juan Dela Cruz", date: "2023-05-15", timeIn: "07:55", timeOut: "10:05", status: "Present" },
+      { id: "2023002", name: "Maria Santos", date: "2023-05-15", timeIn: "08:10", timeOut: "09:55", status: "Late" },
+      { id: "2023003", name: "Jose Ramos", date: "2023-05-15", timeIn: "", timeOut: "", status: "Absent" }
+    ],
+    "Math": [
+      { id: "2023001", name: "Luis Tan", date: "2023-05-16", timeIn: "09:55", timeOut: "12:00", status: "Present" },
+      { id: "2023004", name: "Anna Dela Vega", date: "2023-05-16", timeIn: "10:15", timeOut: "11:45", status: "Late" }
+    ]
+  };
+
+  // Modal functions
   function openModal() {
     document.getElementById('modal').classList.remove('hidden');
     document.getElementById('modal').classList.add('flex');
@@ -94,12 +260,217 @@
     document.getElementById('modal').classList.remove('flex');
   }
 
-  // Optional: handle form submission
+  function openEditModal(subjectName) {
+    const subject = subjects.find(sub => sub.name === subjectName);
+    if (subject) {
+      document.getElementById('editSubjectName').value = subject.name;
+      document.getElementById('editProfessor').value = subject.professor;
+      document.getElementById('editDay').value = subject.day;
+      document.getElementById('editStartTime').value = subject.startTime;
+      document.getElementById('editEndTime').value = subject.endTime;
+      
+      document.getElementById('editModal').classList.remove('hidden');
+      document.getElementById('editModal').classList.add('flex');
+    }
+  }
+
+  function closeEditModal() {
+    document.getElementById('editModal').classList.add('hidden');
+    document.getElementById('editModal').classList.remove('flex');
+  }
+
+  function editSubject(subjectName) {
+    openEditModal(subjectName);
+  }
+
+  function viewStudents(subject) {
+    const studentModal = document.getElementById('studentModal');
+    const subjectTitleEl = document.getElementById('subjectTitle');
+    const studentTableBody = document.getElementById('studentTableBody');
+
+    // Update subject title
+    subjectTitleEl.textContent = subject;
+
+    // Get student records or fallback
+    const students = subjectStudents[subject] || [
+      { id: "", name: "No records found", date: "", timeIn: "", timeOut: "", status: "" }
+    ];
+
+    // Render student table rows
+    studentTableBody.innerHTML = students.map(student => `
+      <tr class="border-t">
+        <td class="px-4 py-2">${student.id}</td>
+        <td class="px-4 py-2">${student.name}</td>
+        <td class="px-4 py-2">${student.date}</td>
+        <td class="px-4 py-2">${formatTime(student.timeIn)}</td>
+        <td class="px-4 py-2">${formatTime(student.timeOut)}</td>
+        <td class="px-4 py-2">
+          <span class="px-2 py-1 rounded text-xs ${
+            student.status === 'Present' ? 'bg-green-100 text-green-800' : 
+            student.status === 'Late' ? 'bg-yellow-100 text-yellow-800' : 
+            student.status === 'Absent' ? 'bg-red-100 text-red-800' : 
+            'bg-gray-100 text-gray-800'
+          }">
+            ${student.status}
+          </span>
+        </td>
+        <td class="px-4 py-2 text-center">
+          <button onclick="editStudentRecord('${subject}', '${student.id}')" class="bg-blue-600 text-white text-xs px-3 py-1 rounded hover:bg-blue-700">
+            Edit
+          </button>
+        </td>
+      </tr>
+    `).join("");
+
+    // Show modal
+    studentModal.classList.remove('hidden');
+    studentModal.classList.add('flex');
+  }
+
+  function closeStudentModal() {
+    const studentModal = document.getElementById('studentModal');
+    studentModal.classList.add('hidden');
+    studentModal.classList.remove('flex');
+  }
+
+  function openEditStudentModal(subjectName, studentId) {
+    const students = subjectStudents[subjectName] || [];
+    const student = students.find(s => s.id === studentId);
+    
+    if (student) {
+      document.getElementById('editStudentId').value = student.id;
+      document.getElementById('editStudentName').value = student.name;
+      document.getElementById('editStudentDate').value = student.date;
+      document.getElementById('editStudentTimeIn').value = student.timeIn;
+      document.getElementById('editStudentTimeOut').value = student.timeOut;
+      document.getElementById('editStudentStatus').value = student.status;
+      
+      document.getElementById('editStudentModal').classList.remove('hidden');
+      document.getElementById('editStudentModal').classList.add('flex');
+    }
+  }
+
+  function closeEditStudentModal() {
+    document.getElementById('editStudentModal').classList.add('hidden');
+    document.getElementById('editStudentModal').classList.remove('flex');
+  }
+
+  function editStudentRecord(subjectName, studentId) {
+    openEditStudentModal(subjectName, studentId);
+  }
+
+  // Class control functions
+  function cancelClass() {
+    const subjectName = document.getElementById('subjectTitle').textContent;
+    if (confirm(`Are you sure you want to cancel the "${subjectName}" class?`)) {
+      alert(`Class "${subjectName}" has been canceled`);
+      // In a real app, you would:
+      // 1. Mark all students as absent
+      // 2. Update the database
+      // 3. Refresh the student records
+    }
+  }
+
+  function formatTime(timeString) {
+    if (!timeString) return "";
+    
+    // Convert "HH:MM" to "HH:MM AM/PM" format
+    const [hours, minutes] = timeString.split(':');
+    const hour = parseInt(hours, 10);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour % 12 || 12;
+    
+    return `${hour12}:${minutes} ${ampm}`;
+  }
+
+  // Handle form submissions
   document.getElementById('subjectForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    // Process the form data here (e.g., append to table or send to backend)
     alert("Subject added (this is a placeholder)");
     closeModal();
+  });
+
+  document.getElementById('editSubjectForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert("Subject updated (this is a placeholder)");
+    closeEditModal();
+  });
+
+  document.getElementById('editStudentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const studentId = document.getElementById('editStudentId').value;
+    const subjectName = document.getElementById('subjectTitle').textContent;
+    
+    // In a real app, you would update the data here
+    alert(`Student record ${studentId} updated for ${subjectName}`);
+    closeEditStudentModal();
+    
+    // Refresh the student records view
+    viewStudents(subjectName);
+  });
+
+  $(document).ready(function() {
+      $('#sendDateFilter').click(function() {
+          const startDate = new Date($('#startDate').val());
+          const endDate = new Date($('#endDate').val());
+          
+          // Validate dates
+          if (isNaN(startDate.getTime())) {
+              alert('Please select a valid start date');
+              return;
+          }
+          
+          if (isNaN(endDate.getTime())) {
+              alert('Please select a valid end date');
+              return;
+          }
+          
+          if (startDate > endDate) {
+              alert('Start date cannot be after end date');
+              return;
+          }
+          
+          // Filter table rows
+          $('table tbody tr').each(function() {
+              const rowDateStr = $(this).find('td:eq(1)').text(); // Assuming date is in second column
+              const rowDate = new Date(rowDateStr);
+              
+              if (rowDate >= startDate && rowDate <= endDate) {
+                  $(this).show();
+              } else {
+                  $(this).hide();
+              }
+          });
+      });
+      
+      // If you have a cancel button to reset the filter
+      $('#cancelButton').click(function() {
+          $('#startDate').val('');
+          $('#endDate').val('');
+          $('table tbody tr').show();
+      });
+  });
+
+  // Close modals when clicking outside
+  window.addEventListener('click', function(event) {
+    const modal = document.getElementById('modal');
+    const editModal = document.getElementById('editModal');
+    const studentModal = document.getElementById('studentModal');
+    const editStudentModal = document.getElementById('editStudentModal');
+    
+    if (event.target === modal) {
+      closeModal();
+    }
+    if (event.target === editModal) {
+      closeEditModal();
+    }
+    if (event.target === studentModal) {
+      closeStudentModal();
+    }
+    if (event.target === editStudentModal) {
+      closeEditStudentModal();
+    }
   });
 </script>
 
